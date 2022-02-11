@@ -1,4 +1,7 @@
-const buf = (...args: number[]) => new Uint8Array(args)
+export function buf(...args: number[]): Uint8Array
+export function buf() {
+  return new Uint8Array(Array.prototype.slice.call(arguments))
+}
 
 export const resetCommand = () => buf(27, 64)
 export const setCharsetCommand = (charset: number) => buf(27, 82, charset)
