@@ -27,7 +27,9 @@ function __awaiter(thisArg, _arguments, P, generator) {
     });
 }
 
-const buf = (...args) => new Uint8Array(args);
+function buf() {
+    return new Uint8Array(Array.prototype.slice.call(arguments));
+}
 const resetCommand = () => buf(27, 64);
 const setCharsetCommand = (charset) => buf(27, 82, charset);
 const setCharCodeTableCommand = (code) => buf(27, 116, code);
@@ -42,8 +44,12 @@ const inverseCommand = (onOff) => buf(29, 66, onOff);
 const alignCommand = (side) => buf(27, 97, side);
 const indentCommand = (columns) => buf(27, 66, columns);
 const setLineSpacingCommand = (lineSpacing) => buf(27, 51, lineSpacing);
-const horizontalLineCommand = (length) => buf(...Array(length).fill(196), 10);
-const printTextCommand = (text) => buf(...text);
+const horizontalLineCommand = (length) => {
+    const args = Array(length).fill(196);
+    args.push(length);
+    buf.apply(undefined, args);
+};
+// export const printTextCommand = (text: number[]) => buf(...text)
 const printNewLineCommand = () => buf(10);
 
 const defaultOptions = {
@@ -99,6 +105,7 @@ class ThermalPrinter {
 }
 
 exports.alignCommand = alignCommand;
+exports.buf = buf;
 exports["default"] = ThermalPrinter;
 exports.horizontalLineCommand = horizontalLineCommand;
 exports.indentCommand = indentCommand;
@@ -107,7 +114,6 @@ exports.lineFeedCommand = lineFeedCommand;
 exports.printModeCommand = printModeCommand;
 exports.printNewLineCommand = printNewLineCommand;
 exports.printTestPageCommand = printTestPageCommand;
-exports.printTextCommand = printTextCommand;
 exports.resetCommand = resetCommand;
 exports.sendPrintingParamsCommand = sendPrintingParamsCommand;
 exports.setCharCodeTableCommand = setCharCodeTableCommand;
