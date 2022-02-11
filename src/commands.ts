@@ -14,6 +14,11 @@ export const inverseCommand = (onOff: 0 | 1) => buf(29, 66, onOff)
 export const alignCommand = (side: 0 | 1 | 2) => buf(27, 97, side)
 export const indentCommand = (columns: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9) => buf(27, 66, columns)
 export const setLineSpacingCommand = (lineSpacing: number) => buf(27, 51, lineSpacing)
-export const horizontalLineCommand = (length: number) => buf(...Array(length).fill(196), 10)
-export const printTextCommand = (text: number[]) => buf(...text)
+export const horizontalLineCommand = (length: number) => {
+  const args = Array(length).fill(196)
+
+  args.push(length)
+  buf.apply(undefined, args)
+}
+// export const printTextCommand = (text: number[]) => buf(...text)
 export const printNewLineCommand = () => buf(10)
